@@ -11,13 +11,14 @@ class Badges extends React.Component {
   state = {
     loading: true,
     error: null,
-    data: undefined,
+    data: {
+      results: []
+    },
     nextPage: 1
   };
 
   componentDidMount() {
-    this.fetchData();
-    // this.fetchCharacter();
+    this.fetchCharacter();
   }
 
   fetchCharacter = async () => {
@@ -30,31 +31,16 @@ class Badges extends React.Component {
         `https://rickandmortyapi.com/api/character?page=${this.state.nextPage}`
       );
       const data = await response.json();
-      console.log("Data procesada:", data.results);
+
       this.setState({
-        data: data.results,
+        data: {
+          info: data.info,
+          results: [].concat(
+            this.state.data.results, data.results
+          )
+        },
         loading: false,
         nextPage: this.state.nextPage + 1
-      });
-    } catch (error) {
-      console.log(error);
-      this.setState({
-        loading: false,
-        error: error
-      });
-    }
-  };
-
-  fetchData = async () => {
-    this.setState({
-      loading: true,
-      error: null
-    });
-    try {
-      const data = await Api.badges.list();
-      this.setState({
-        loading: false,
-        data: data
       });
     } catch (error) {
       console.log(error);
@@ -95,7 +81,12 @@ class Badges extends React.Component {
               New Badge
             </Link>
           </div>
-          <BadgesList badges={this.state.data} />
+          <BadgesList badges={this.state.data.results} />
+          {
+            !this.state.loading &&(
+              <button className='btn btn-primary' onClick={()=>this.fetchCharacter()}>Load more</button>
+            )
+          }
         </div>
       </React.Fragment>
     );
