@@ -26,33 +26,6 @@ class BadgesListItem extends React.Component {
   }
 }
 
-class BadgesListItemApi extends React.Component {
-  render() {
-
-    console.log('BadgesListItemApi:', this.props.badge);
-    return (
-      <div className="BadgesListItem">
-        <img
-          className="BadgesListItem__avatar"
-          src={this.props.badge.image}
-          alt={`${this.props.badge.name}`}
-        />
-
-        <div>
-          <strong>
-            {this.props.badge.name} {this.props.badge.lastName}
-          </strong>
-          <br />@{this.props.badge.name}
-          <br />
-          {this.props.badge.species}
-        </div>
-      </div>
-    );
-  }
-}
-
-
-
 class BadgesList extends React.Component {
   render() {
     console.log('this.props.badges: ', this.props.badges)

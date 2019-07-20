@@ -11,39 +11,12 @@ class Badges extends React.Component {
   state = {
     loading: true,
     error: null,
-    data: undefined,
-    nextPage: 1
+    data: undefined
   };
 
   componentDidMount() {
     this.fetchData();
-    // this.fetchCharacter();
   }
-
-  fetchCharacter = async () => {
-    this.setState({
-      loading: true,
-      error: null
-    });
-    try {
-      const response = await fetch(
-        `https://rickandmortyapi.com/api/character?page=${this.state.nextPage}`
-      );
-      const data = await response.json();
-      console.log("Data procesada:", data.results);
-      this.setState({
-        data: data.results,
-        loading: false,
-        nextPage: this.state.nextPage + 1
-      });
-    } catch (error) {
-      console.log(error);
-      this.setState({
-        loading: false,
-        error: error
-      });
-    }
-  };
 
   fetchData = async () => {
     this.setState({
