@@ -1,15 +1,15 @@
 import React from "react";
 
-import "./styles/BadgeNew.css";
+import "./styles/BadgeEdit.css";
 import header from "../images/platziconf-logo.svg";
 import Badge from "../components/Badge";
 import BadgeForm from "../components/BadgeForm";
 import api from "../api";
-import PageLoading from '../components/PageLoading';
+import PageLoading from "../components/PageLoading";
 
-class BadgeNew extends React.Component {
+class BadgeEdit extends React.Component {
   state = {
-    loading: false,
+    loading: true,
     error: null,
     form: {
       firstName: "",
@@ -17,6 +17,37 @@ class BadgeNew extends React.Component {
       email: "",
       jobTitle: "",
       twitter: ""
+    }
+  };
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = async () => {
+    this.setState({
+      loading: true,
+      error: null
+    });
+    try {
+      const {
+        match: {
+          params: { badgeId }
+        }
+      } = this.props;
+
+      const data = await api.badges.read(badgeId);
+      console.log("Edit Data:", data);
+      this.setState({
+        loading: false,
+        form: data
+      });
+    } catch (error) {
+      console.log(error);
+      this.setState({
+        loading: false,
+        error: error
+      });
     }
   };
 
@@ -36,19 +67,24 @@ class BadgeNew extends React.Component {
       error: null
     });
 
-    
     try {
+      const {
+        match: {
+          params: { badgeId }
+        }
+      } = this.props;
+
       await setTimeout(() => {
-        console.log('timeout')
+        console.log("timeout");
       }, 3000);
-      
-      await api.badges.create(this.state.form);
-      
+
+      await api.badges.update(badgeId,this.state.form);
+
       this.setState({
         loading: false
       });
 
-      this.props.history.push('/badges');
+      this.props.history.push("/badges");
     } catch (error) {
       this.setState({
         loading: false,
@@ -58,15 +94,14 @@ class BadgeNew extends React.Component {
   };
 
   render() {
-
-    if(this.state.loading){
-      return <PageLoading></PageLoading>
+    if (this.state.loading) {
+      return <PageLoading />;
     }
     return (
       <React.Fragment>
-        <div className="BadgeNew__hero">
+        <div className="BadgeEdit__hero">
           <img
-            className="BadgeNew__hero-image img-fluid"
+            className="BadgeEdit__hero-image img-fluid"
             src={header}
             alt="Logo"
           />
@@ -91,7 +126,7 @@ class BadgeNew extends React.Component {
                 onSubmit={this.handleSubmit}
                 formValues={this.state.form}
                 error={this.state.error}
-                action= 'New'
+                action= 'Edit'
               />
             </div>
           </div>
@@ -101,4 +136,4 @@ class BadgeNew extends React.Component {
   }
 }
 
-export default BadgeNew;
+export default BadgeEdit;
