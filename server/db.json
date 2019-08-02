@@ -445,7 +445,7 @@
       "firstName": "Cesar",
       "lastName": "Guerron",
       "email": "guerronc@outlook.com",
-      "jobTitle": "Developer",
+      "jobTitle": "Web Developer",
       "twitter": "guerronc",
       "id": "QRTw4-t"
     },
@@ -456,14 +456,6 @@
       "jobTitle": "Desing",
       "twitter": "nina",
       "id": "GG1O9zu"
-    },
-    {
-      "firstName": "Nina",
-      "lastName": "Zambrano",
-      "email": "ninazambrano@gmail.com",
-      "jobTitle": "Desing",
-      "twitter": "nina",
-      "id": "Ybtxx31"
     }
   ]
 }
