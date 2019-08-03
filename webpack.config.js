@@ -2,17 +2,16 @@ const path = require("path");
 const MiniCSSExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+const addAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 
 module.exports = {
   entry: {
-    home: path.resolve(__dirname, "src/js/index.js"),
-    contact: path.resolve(__dirname, "src/js/contact.js")
+    add: path.resolve(__dirname, "src/index.js")
   },
-  mode: "production",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "js/[name].js",
-    publicPath: 'dist/',
+    publicPath: 'http://localhost:3001/',
     chunkFilename: 'js/[id].[chunkhash].js'
   },
   module: {
@@ -29,43 +28,7 @@ module.exports = {
           {
             loader: MiniCSSExtractPlugin.loader
           },
-          {
-            loader: "css-loader",
-            options: {
-              importLoaders: 1
-            }
-          },
-          "postcss-loader"
-        ]
-      },
-      {
-        test: /\.less$/,
-        use: [
-          {
-            loader: MiniCSSExtractPlugin.loader
-          },
-          "css-loader",
-          "less-loader"
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: MiniCSSExtractPlugin.loader
-          },
-          "css-loader",
-          "sass-loader"
-        ]
-      },
-      {
-        test: /\.styl$/,
-        use: [
-          {
-            loader: MiniCSSExtractPlugin.loader
-          },
-          "css-loader",
-          "stylus-loader"
+          "css-loader"
         ]
       },
       {
@@ -73,25 +36,15 @@ module.exports = {
         use: {
           loader: 'url-loader',
           options: {
-            limit: 90000,
+            limit: 1000,
           }
         }
       },
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      title: "Home",
-      template: path.resolve(__dirname,'index.html'),
-      chunks: ['commons', 'home'],
-      filename: 'index.html'
-    }),
-    new HtmlWebpackPlugin({
-      title: "Contact",
-      template: path.resolve(__dirname,'index.html'),
-      chunks: ['commons', 'contact'],
-      filename: 'contact.html'
+      template: path.resolve(__dirname,'public/index.html')
     }),
     new MiniCSSExtractPlugin({
       filename: "css/[name].css",
@@ -99,6 +52,11 @@ module.exports = {
     }),
     new webpack.DllReferencePlugin({
       manifest: require('./modules-manifest.json')
+    }),
+    new addAssetHtmlPlugin({
+      filepath: path.resolve(__dirname,'dist/js/*.dll.js'),
+      outputPath: 'js',
+      publicPath: 'http://localhost:3001/js'
     })
   ]
 };
